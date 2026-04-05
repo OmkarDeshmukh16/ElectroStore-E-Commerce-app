@@ -14,7 +14,7 @@ This project is configured to deploy frontend on **Vercel** and backend on **Ren
 
 ### Environment Variables
 Add these in Vercel dashboard Settings → Environment Variables:
-- `VITE_BACKEND_URL`: Your Render backend URL (e.g., `https://electrostore-backend.onrender.com`)
+- `VITE_BACKEND_URL`: Your Render backend URL (e.g., `https://electrostore-e-commerce-app.onrender.com`)
 
 ### Deployment
 - Vercel automatically deploys on every push to main branch
