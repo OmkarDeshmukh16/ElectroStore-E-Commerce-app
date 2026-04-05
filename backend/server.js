@@ -9,7 +9,14 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = process.env.FRONTEND_URL 
+  ? [process.env.FRONTEND_URL, 'http://localhost:3000', 'http://localhost:5173']
+  : ['http://localhost:3000', 'http://localhost:5173'];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -29,20 +36,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Serve frontend statically in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-  app.get('*', (req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, '../', 'frontend', 'dist', 'index.html')
-    );
-  });
-} else {
-  app.get('/', (req, res) => {
-    res.send('API is running. Please run in production mode to serve frontend.');
-  });
-}
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'Backend is running' });
+});
 
 const PORT = process.env.PORT || 5000;
 
