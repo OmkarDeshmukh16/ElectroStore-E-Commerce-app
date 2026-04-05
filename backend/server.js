@@ -9,9 +9,19 @@ dotenv.config();
 const app = express();
 
 // Middleware
-const allowedOrigins = process.env.FRONTEND_URL 
-  ? [process.env.FRONTEND_URL, 'http://localhost:3000', 'http://localhost:5173']
-  : ['http://localhost:3000', 'http://localhost:5173'];
+const allowedOrigins = [
+  'http://localhost:3000', 
+  'http://localhost:5173',
+  'https://electro-store-e-commerce-app.vercel.app'
+];
+
+if (process.env.FRONTEND_URL) {
+  // Remove trailing slash if present to avoid mismatch
+  const cleanUrl = process.env.FRONTEND_URL.replace(/\/$/, "");
+  if (!allowedOrigins.includes(cleanUrl)) {
+    allowedOrigins.push(cleanUrl);
+  }
+}
 
 app.use(cors({
   origin: allowedOrigins,
